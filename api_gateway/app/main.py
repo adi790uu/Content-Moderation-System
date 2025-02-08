@@ -1,12 +1,12 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Request, Response
 from contextlib import asynccontextmanager
 from fastapi.responses import JSONResponse
-from loguru import logger
 from fastapi.middleware.cors import CORSMiddleware
-from app.schemas import ApiResponse
-import uvicorn
+from common.schemas.api import ApiResponse
 from prometheus_client import Counter, Gauge
 import prometheus_client
+from common.logging.config import setup_logging
+import requests
 
 REQUEST_COUNT = Counter("api_requests_total", "Total number of API requests")
 HEALTH_STATUS = Gauge(
@@ -14,10 +14,13 @@ HEALTH_STATUS = Gauge(
     "Health status of the API Gateway",
 )
 
+MODERATION_SERVICE_URL = "http://localhost:8001"
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
+        logger = setup_logging(service_name="api-gateway")
         logger.info("Starting the API gateway")
         yield
         logger.info("Closing the API gateway")
@@ -57,5 +60,10 @@ async def get_metrics():
     )
 
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=5000)
+@app.post("/moderate")
+async def proxy_moderation(request: Request):
+    data = await request.json()
+    response = requests.post(
+        f"{MODERATION_SERVICE_URL}/api/v1/moderate/text", json=data
+    )
+    return response.json()
