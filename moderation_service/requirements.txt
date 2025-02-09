@@ -1,3 +1,14 @@
 redis
 celery
+cuid
 fastapi
+uvicorn
+sqlalchemy
+pydantic_settings
+openai
+asyncpg
+greenlet
+loguru
+psycopg2-binary
+alembic
+tenacity

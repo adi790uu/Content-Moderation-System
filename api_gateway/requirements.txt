@@ -3,3 +3,4 @@ uvicorn
 loguru
 prometheus_client
 loguru
+httpx

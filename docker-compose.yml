@@ -5,17 +5,36 @@ services:
     container_name: api-gateway
     build:
       context: .
-      dockerfile: ./dockerfile
+      dockerfile: ./api_gateway/dockerfile
     restart: "on-failure"
     ports:
       - 5500:5000
+    networks:
+      - app-network
+
+  moderation-service:
+    container_name: moderation-service
+    build:
+      context: .
+      dockerfile: ./moderation_service/dockerfile
+    restart: "on-failure"
+    ports:
+      - 6500:6000
+    networks:
+      - app-network
 
   prometheus:
     image: prom/prometheus:latest
     restart: "always"
     volumes:
-      - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - 9090:9090
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
