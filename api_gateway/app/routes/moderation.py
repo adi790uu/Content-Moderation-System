@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, Depends
+from pydantic import UUID4
 from app.services.moderation import ModerationService
 from app.core.rate_limiter import rate_limit
 
@@ -17,3 +18,11 @@ async def proxy_moderation(
 ):
     data = await request.json()
     return await moderation_service.moderate_text(data)
+
+
+@router.get("/result/{id}")
+async def proxy_moderation_result(
+    id: UUID4,
+    moderation_service: ModerationService = Depends(get_moderation_service),
+):
+    return await moderation_service.moderation_result(id=id)

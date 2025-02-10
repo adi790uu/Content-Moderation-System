@@ -1,4 +1,6 @@
 from typing import Any, Dict
+
+from pydantic import UUID4
 from app.core.exceptions import ModerationServiceException
 from loguru import logger
 import httpx
@@ -42,6 +44,33 @@ class ModerationService:
                 response = await client.post(
                     f"{self.base_url}/api/v1/moderate/text",
                     json=data,
+                    timeout=10.0,
+                )
+                response.raise_for_status()
+                return response.json()
+        except httpx.TimeoutException:
+            logger.error("Timeout during text moderation request")
+            raise ModerationServiceException(
+                "Moderation request timeout", status_code=504
+            )
+        except httpx.HTTPStatusError as e:
+            logger.error(f"HTTP error during moderation: {str(e)}")
+            raise ModerationServiceException(
+                f"Moderation request failed: {str(e)}",
+                status_code=e.response.status_code,
+            )
+        except Exception as e:
+            logger.error(f"Unexpected error during moderation: {str(e)}")
+            raise ModerationServiceException(
+                "Internal server error",
+                status_code=500,
+            )
+
+    async def moderation_result(self, id: UUID4) -> Dict[str, Any]:
+        try:
+            async with httpx.AsyncClient() as client:
+                response = await client.get(
+                    f"{self.base_url}/api/v1/moderation/{id}",
                     timeout=10.0,
                 )
                 response.raise_for_status()
