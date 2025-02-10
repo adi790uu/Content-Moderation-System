@@ -4,3 +4,6 @@ loguru
 prometheus_client
 loguru
 httpx
+fastapi-limiter
+redis
+tenacity

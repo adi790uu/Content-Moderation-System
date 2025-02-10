@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import setup_logging
+from app.core.logging_config import setup_logging
 from app.routes import health, moderation
 from app.core.rate_limiter import setup_rate_limiter
 from app.core.middleware import error_handling_middleware

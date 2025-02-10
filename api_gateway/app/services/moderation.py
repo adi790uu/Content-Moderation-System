@@ -20,10 +20,17 @@ class ModerationService:
                 return response.json()
         except httpx.TimeoutException:
             logger.error(
-                f"Timeout while connecting to moderation service at {self.base_url}"
+                f"Timeout while connecting to moderation service at {self.base_url}"  # noqa
             )
             raise ModerationServiceException(
                 "Moderation service timeout", status_code=504
+            )
+        except httpx.NetworkError:
+            logger.error(
+                f"Cannot connect to moderation service at {self.base_url}"
+            )  # noqa
+            raise ModerationServiceException(
+                "Cannot connect to moderation service", status_code=503
             )
         except httpx.HTTPStatusError as e:
             logger.error(f"HTTP error from moderation service: {str(e)}")
@@ -32,7 +39,9 @@ class ModerationService:
                 status_code=e.response.status_code,
             )
         except Exception as e:
-            logger.error(f"Unexpected error connecting to moderation service: {str(e)}")
+            logger.error(
+                f"Unexpected error connecting to moderation service: {str(e)}"
+            )  # noqa
             raise ModerationServiceException(
                 "Internal server error",
                 status_code=500,
@@ -40,6 +49,7 @@ class ModerationService:
 
     async def moderate_text(self, data: Dict[str, Any]) -> Dict[str, Any]:
         try:
+
             async with httpx.AsyncClient() as client:
                 response = await client.post(
                     f"{self.base_url}/api/v1/moderate/text",
@@ -76,18 +86,18 @@ class ModerationService:
                 response.raise_for_status()
                 return response.json()
         except httpx.TimeoutException:
-            logger.error("Timeout during text moderation request")
+            logger.error("Timeout during fetching moderation results request")
             raise ModerationServiceException(
                 "Moderation request timeout", status_code=504
             )
         except httpx.HTTPStatusError as e:
-            logger.error(f"HTTP error during moderation: {str(e)}")
+            logger.error(f"HTTP error fetching moderation results: {str(e)}")
             raise ModerationServiceException(
                 f"Moderation request failed: {str(e)}",
                 status_code=e.response.status_code,
             )
         except Exception as e:
-            logger.error(f"Unexpected error during moderation: {str(e)}")
+            logger.error(f"Unexpected error fetching moderation results: {str(e)}")
             raise ModerationServiceException(
                 "Internal server error",
                 status_code=500,

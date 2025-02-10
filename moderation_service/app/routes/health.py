@@ -1,29 +1,37 @@
 from fastapi import APIRouter
-from app.common.schemas.api import ApiResponse
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+from app.common.schemas.api import ApiResponse
 from loguru import logger
 
 
 router = APIRouter()
 
 
-class SampleReponse(BaseModel):
+class HealthResponse(BaseModel):
     message: str
 
 
 @router.get(
     "/v1/health",
-    response_model=ApiResponse[SampleReponse],
 )
 async def get_moderation_service_health():
     try:
-        return ApiResponse(
-            success=True, data=SampleReponse(message="Service is healthy")
+        return JSONResponse(
+            status_code=200,
+            content=ApiResponse(
+                success=True,
+                data=HealthResponse(
+                    message="Service is healthy",
+                ),
+            ).model_dump(),
         )
     except Exception as e:
         logger.error(f"Health check failed: {e}")
-        return ApiResponse(
-            success=False,
-            error="Service is unhealthy",
-            data=SampleReponse(message="Service is unhealthy"),
+        return JSONResponse(
+            status_code=500,
+            content=ApiResponse(
+                success=False,
+                error="Service is unhealthy",
+            ).model_dump(),
         )

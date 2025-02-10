@@ -1,7 +1,8 @@
 import app.external.openai as openai_service
 from pydantic import UUID4
-
 from app.database.repository import ModerationRepository
+from app.core import redis
+from loguru import logger
 
 
 class ModerationService:
@@ -12,7 +13,19 @@ class ModerationService:
 
     @staticmethod
     async def get_moderation_results(id: UUID4):
-        moderation_result = await ModerationRepository.get_moderation_result_by_uuid(
-            uuid=id
+        cached_result: str = await redis.get_redis_with_retry(
+            key=f"moderation_id:{id}",
         )
-        return moderation_result.result
+        logger.info(cached_result)
+        if cached_result:
+            return cached_result
+        moderation_result: bool = (
+            await ModerationRepository.get_moderation_result_by_uuid(
+                uuid=id,
+            )
+        )
+        await redis.set_redis_with_retry(
+            key=f"moderation_id:{id}",
+            value=str(moderation_result),
+        )
+        return moderation_result

@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.common.logging.config import setup_logging
 from .routes import moderation, health
+from app.core import redis
 
 
 @asynccontextmanager
@@ -11,6 +12,7 @@ async def lifespan(app: FastAPI):
         logger.info("Starting the API gateway")
         yield
         logger.info("Closing the API gateway")
+        redis.close_redis_connection()
     except Exception as e:
         logger.error(f"Error during startup: {e}")
         raise
