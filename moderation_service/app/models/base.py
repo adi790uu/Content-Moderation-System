@@ -1,17 +1,17 @@
-from sqlalchemy import Column, DateTime, String
+from sqlalchemy import Column, DateTime, UUID
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy.sql import func
-import cuid
+import uuid
 
 
 @as_declarative()
 class Base:
-    cuid = Column(
-        String(25),
+    uuid = Column(
+        UUID(as_uuid=True),
         primary_key=True,
-        default=cuid.cuid,
-        unique=True,
+        index=True,
         nullable=False,
+        default=uuid.uuid4,
     )
     created_at = Column(DateTime, server_default=func.now(), nullable=False)
     updated_at = Column(

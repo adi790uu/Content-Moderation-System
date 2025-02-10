@@ -5,6 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     DATABASE_URL: Optional[str] = None
+    SYNC_DATABASE_URL: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
 
 

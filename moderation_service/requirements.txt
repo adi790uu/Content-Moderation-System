@@ -12,3 +12,4 @@ loguru
 psycopg2-binary
 alembic
 tenacity
+alembic
