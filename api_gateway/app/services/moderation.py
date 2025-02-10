@@ -47,13 +47,12 @@ class ModerationService:
                 status_code=500,
             )
 
-    async def moderate_text(self, data: Dict[str, Any]) -> Dict[str, Any]:
+    async def moderate_text(self, text: str) -> Dict[str, Any]:
         try:
-
             async with httpx.AsyncClient() as client:
                 response = await client.post(
                     f"{self.base_url}/api/v1/moderate/text",
-                    json=data,
+                    json={"text": text},
                     timeout=10.0,
                 )
                 response.raise_for_status()
@@ -97,7 +96,9 @@ class ModerationService:
                 status_code=e.response.status_code,
             )
         except Exception as e:
-            logger.error(f"Unexpected error fetching moderation results: {str(e)}")
+            logger.error(
+                f"Unexpected error fetching moderation results: {str(e)}"
+            )  # noqa
             raise ModerationServiceException(
                 "Internal server error",
                 status_code=500,

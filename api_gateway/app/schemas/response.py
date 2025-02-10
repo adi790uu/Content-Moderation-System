@@ -8,3 +8,7 @@ class ApiResponse(Generic[T], BaseModel):
     success: bool
     data: Optional[T] = None
     error: Optional[str] = None
+
+
+class HealthResponse(BaseModel):
+    message: str

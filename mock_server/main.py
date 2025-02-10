@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
+import asyncio
 
 
 @asynccontextmanager
@@ -95,7 +96,7 @@ async def mock_moderation_api():
         dict: A mock response containing moderation results with pre-defined scores and categories.
     """
     try:
-        logger.info("Here")
+        asyncio.sleep(2)
         return MOCK_MODERATION_RESPONSE
     except Exception as e:
         logger.error(f"Error in moderation API: {e}")

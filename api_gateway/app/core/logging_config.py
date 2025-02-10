@@ -1,6 +1,10 @@
+import contextvars
 import sys
 from pathlib import Path
 from loguru import logger
+
+
+request_id_contextvar = contextvars.ContextVar("request_id", default=None)
 
 
 def setup_logging(service_name: str, log_level: str = "INFO"):

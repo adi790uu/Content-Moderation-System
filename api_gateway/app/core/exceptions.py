@@ -11,3 +11,7 @@ class ModerationServiceException(ServiceException):
 
 class HealthCheckException(ServiceException):
     pass
+
+
+class ValidationException(ServiceException):
+    pass

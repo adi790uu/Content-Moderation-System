@@ -1,15 +1,11 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from app.common.schemas.api import ApiResponse
+from app.schemas.response import HealthResponse
+from app.schemas.response import ApiResponse
 from loguru import logger
 
 
 router = APIRouter()
-
-
-class HealthResponse(BaseModel):
-    message: str
 
 
 @router.get(
