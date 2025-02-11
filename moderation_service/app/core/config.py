@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: Optional[str] = None
     REDIS_URL: Optional[str] = None
     API_GATEWAY_DOMAIN: str
+    GATEWAY_KEY: str = "secret"
 
 
 class DevelopmentSettings(Settings):
