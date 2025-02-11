@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     REDIS_URL: Optional[str] = None
     API_GATEWAY_DOMAIN: str
     GATEWAY_KEY: str = "secret"
+    LOG_LEVEL: str = "INFO"
+    TEXT_MODERATION_API: str
 
 
 class DevelopmentSettings(Settings):

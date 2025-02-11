@@ -5,7 +5,7 @@ from app.services.moderation import ModerationService
 from app.database.repository import ModerationRepository
 import json
 
-celery_app = Celery("tasks")
+celery_app = Celery("tasks", broker="amqp://guest:guest@rabbitmq:5672/")
 celery_app.config_from_object("app.tasks.celery_config")
 
 

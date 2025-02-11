@@ -1,6 +1,6 @@
 from kombu import Exchange, Queue
 
-broker_url = "amqp://guest:guest@localhost:5672//"
+broker_url = "amqp://guest:guest@rabbitmq:5672/"
 
 task_queues = [
     Queue(

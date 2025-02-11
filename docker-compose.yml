@@ -1,25 +1,60 @@
-version: "3.8"
-
 services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
   api-gateway:
     container_name: api-gateway
     build:
-      context: .
-      dockerfile: ./api_gateway/dockerfile
+      context: ./api_gateway
+      dockerfile: ./dockerfile
     restart: "on-failure"
+    depends_on:
+      - redis
     ports:
-      - 5500:5000
+      - 8000:8000
     networks:
       - app-network
 
   moderation-service:
-    container_name: moderation-service
     build:
-      context: .
-      dockerfile: ./moderation_service/dockerfile
-    restart: "on-failure"
+      context: ./moderation_service
+      dockerfile: ./dockerfile.service
     ports:
-      - 6500:6000
+      - "8001:8001"
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  mock-server:
+    build:
+      context: ./mock_server
+      dockerfile: ./dockerfile
+    ports:
+      - "8003:8003"
+    networks:
+      - app-network
+
+  worker:
+    build:
+      context: ./moderation_service
+      dockerfile: ./dockerfile.worker
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     networks:
       - app-network
 

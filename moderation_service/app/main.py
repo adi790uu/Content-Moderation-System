@@ -22,7 +22,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Moderation Service", lifespan=lifespan)
 
-logger, _ = setup_logging(service_name="moderation_service")
+logger, _ = setup_logging(
+    service_name="moderation_service", log_level=settings.LOG_LEVEL
+)
 log_request_time(app)
 
 

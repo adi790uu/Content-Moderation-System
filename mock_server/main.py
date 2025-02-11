@@ -91,7 +91,7 @@ MOCK_MODERATION_RESPONSE = {
 @app.post("/v1/moderations")
 async def mock_moderation_api():
     try:
-        asyncio.sleep(2)
+        await asyncio.sleep(2)
         return MOCK_MODERATION_RESPONSE
     except Exception as e:
         logger.error(f"Error in moderation API: {e}")
