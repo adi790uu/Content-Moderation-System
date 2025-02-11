@@ -1,31 +1,23 @@
 from fastapi import FastAPI
-from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.logging_config import setup_logging
+from app.core.logging_config import setup_logging, log_request_time
 from app.routes import health, moderation
 from app.core.rate_limiter import setup_rate_limiter
+from contextlib import asynccontextmanager
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    try:
-        logger = setup_logging(service_name="api-gateway")
-        logger.info("Starting the API gateway")
-        await setup_rate_limiter()
-        yield
-        logger.info("Closing the API gateway")
-    except Exception as e:
-        logger.error(f"Error during startup: {e}")
-        raise
+    logger.info("Starting the API gateway")
+    await setup_rate_limiter()
+    yield
+    logger.info("Closing the API gateway")
 
 
-def create_app() -> FastAPI:
-    app = FastAPI(title="API_GATEWAY", lifespan=lifespan)
-    return app
+app = FastAPI(title="API_GATEWAY", lifespan=lifespan)
 
-
-app = create_app()
-
+logger, _ = setup_logging(service_name="api-gateway")
+log_request_time(app)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,10 +1,22 @@
-import contextvars
 import sys
 from pathlib import Path
+import time
+from fastapi import FastAPI, Request
 from loguru import logger
 
 
-request_id_contextvar = contextvars.ContextVar("request_id", default=None)
+def log_request_time(app: FastAPI):
+    @app.middleware("http")
+    async def log_request(request: Request, call_next):
+        start_time = time.time()
+        response = await call_next(request)
+        process_time = time.time() - start_time
+        logger.info(
+            f"Request: {request.method} {request.url} - Processed in {process_time:.4f} seconds"  # noqa
+        )
+        return response
+
+    return log_request
 
 
 def setup_logging(service_name: str, log_level: str = "INFO"):
@@ -33,4 +45,4 @@ def setup_logging(service_name: str, log_level: str = "INFO"):
     )
 
     logger.info(f"Logging initialized for service: {service_name}")
-    return logger
+    return logger, log_request_time

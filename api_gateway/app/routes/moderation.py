@@ -65,7 +65,7 @@ async def proxy_moderation_result(
         response = await moderation_service.moderation_result(id=id)
         return response
     except ServiceException as e:
-        logger.error(f"Moderation service health check failed: {str(e)}")
+        logger.error(f"{str(e)}")
         return JSONResponse(
             status_code=e.status_code,
             content=ApiResponse(success=False, error=e.message).model_dump(),

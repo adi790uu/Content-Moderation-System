@@ -15,7 +15,9 @@ class ModerationService:
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.get(
-                    f"{self.base_url}/api/v1/health", timeout=10.0
+                    f"{self.base_url}/api/v1/health",
+                    timeout=10.0,
+                    headers={"X-Api-Gateway-Key": settings.GATEWAY_KEY},
                 )
                 response.raise_for_status()
                 return response.json()
@@ -55,6 +57,7 @@ class ModerationService:
                     f"{self.base_url}/api/v1/moderate/text",
                     json={"text": text},
                     timeout=10.0,
+                    headers={"X-Api-Gateway-Key": settings.GATEWAY_KEY},
                 )
                 response.raise_for_status()
                 return response.json()
@@ -82,6 +85,7 @@ class ModerationService:
                 response = await client.get(
                     f"{self.base_url}/api/v1/moderation/{id}",
                     timeout=10.0,
+                    headers={"X-Api-Gateway-Key": settings.GATEWAY_KEY},
                 )
                 response.raise_for_status()
                 return response.json()
