@@ -7,3 +7,5 @@ httpx
 fastapi-limiter
 redis
 tenacity
+locust
+pytest

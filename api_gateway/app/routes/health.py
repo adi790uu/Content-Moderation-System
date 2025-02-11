@@ -21,7 +21,9 @@ def get_moderation_service():
 
 
 @router.get("/health")
-async def health_check():
+async def health_check(
+    _: None = Depends(rate_limit(calls=10, period=60)),
+):
     try:
         REQUEST_COUNT.inc()
         GATEWAY_HEALTH_STATUS.set(1.0)

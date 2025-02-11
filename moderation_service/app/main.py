@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from app.core.logging_config import setup_logging
 from .routes import moderation, health
 from app.core import redis
+from fastapi.middleware.cors import CORSMiddleware
+from app.core.config import settings
 
 
 @asynccontextmanager
@@ -19,6 +21,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Moderation Service", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[settings.API_GATEWAY_DOMAIN],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 app.include_router(router=moderation.router, prefix="/api")
 app.include_router(router=health.router, prefix="/api")

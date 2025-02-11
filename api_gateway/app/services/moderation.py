@@ -4,17 +4,18 @@ from pydantic import UUID4
 from app.core.exceptions import ModerationServiceException
 from loguru import logger
 import httpx
+from app.core.config import settings
 
 
 class ModerationService:
-    def __init__(self, base_url: str = "http://localhost:8001"):
-        self.base_url = base_url
+    def __init__(self):
+        self.base_url = settings.MODERATION_SERVICE_BASE_URL
 
     async def check_health(self) -> Dict[str, Any]:
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.get(
-                    f"{self.base_url}/api/v1/health", timeout=5.0
+                    f"{self.base_url}/api/v1/health", timeout=10.0
                 )
                 response.raise_for_status()
                 return response.json()

@@ -90,11 +90,6 @@ MOCK_MODERATION_RESPONSE = {
 
 @app.post("/v1/moderations")
 async def mock_moderation_api():
-    """Mock endpoint for content moderation API.
-
-    Returns:
-        dict: A mock response containing moderation results with pre-defined scores and categories.
-    """
     try:
         asyncio.sleep(2)
         return MOCK_MODERATION_RESPONSE

@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     SYNC_DATABASE_URL: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
     REDIS_URL: Optional[str] = None
+    API_GATEWAY_DOMAIN: str
 
 
 class DevelopmentSettings(Settings):
