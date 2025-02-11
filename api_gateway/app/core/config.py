@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     REDIS_URL: Optional[str] = None
     MODERATION_SERVICE_BASE_URL: Optional[str] = "http://localhost:8001"
     GATEWAY_KEY: Optional[str] = "secret"
+    LOG_LEVEL: Optional[str] = "INFO"
 
 
 class DevelopmentSettings(Settings):

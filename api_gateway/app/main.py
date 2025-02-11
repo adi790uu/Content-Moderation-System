@@ -4,6 +4,7 @@ from app.core.logging_config import setup_logging, log_request_time
 from app.routes import health, moderation
 from app.core.rate_limiter import setup_rate_limiter
 from contextlib import asynccontextmanager
+from app.core.config import settings
 
 
 @asynccontextmanager
@@ -16,7 +17,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="API_GATEWAY", lifespan=lifespan)
 
-logger, _ = setup_logging(service_name="api-gateway")
+logger, _ = setup_logging(
+    service_name="api-gateway",
+    log_level=settings.LOG_LEVEL,
+)
 log_request_time(app)
 
 app.add_middleware(

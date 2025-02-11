@@ -19,8 +19,8 @@ def log_request_time(app: FastAPI):
     return log_request
 
 
-def setup_logging(service_name: str, log_level: str = "INFO"):
-    log_dir = Path(__file__).parent.parent.parent / "logs"
+def setup_logging(service_name: str, log_level: str):
+    log_dir = Path(__file__).parent.parent / "logs"
     log_dir.mkdir(exist_ok=True, parents=True)
 
     logger.remove()

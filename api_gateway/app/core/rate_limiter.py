@@ -2,9 +2,12 @@ from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
 import redis.asyncio as redis
 from loguru import logger
+from app.core.config import settings
+
+redis_url = settings.REDIS_URL
 
 
-async def setup_rate_limiter(redis_url: str = "redis://localhost:6379"):
+async def setup_rate_limiter():
     try:
         redis_client = redis.from_url(redis_url)
         await FastAPILimiter.init(redis_client)

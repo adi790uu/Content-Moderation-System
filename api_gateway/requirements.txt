@@ -9,3 +9,4 @@ redis
 tenacity
 locust
 pytest
+pydantic_settings

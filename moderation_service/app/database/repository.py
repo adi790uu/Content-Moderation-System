@@ -44,5 +44,5 @@ class ModerationRepository:
             logger.error(e)
             raise RepositoryException(
                 message="Error occurred fetching record from database!",
-                status_code=500,
+                status_code=400,
             )
