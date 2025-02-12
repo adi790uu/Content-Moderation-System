@@ -15,6 +15,7 @@ The Content Moderation System is a microservices-based application designed to p
 - [Setup Instructions](#setup-instructions)
 - [Running the Services](#running-the-services)
 - [Docker Compose](#docker-compose)
+- [Prometheus](#prometheus)
 - [Further Reading](#further-reading)
 
 ## Getting Started
@@ -73,6 +74,10 @@ For a one-command start, you can use Docker Compose to run both services togethe
    ```
 
 This command will build and start the API Gateway, Moderation Service containers and other necessary services, allowing you to interact with the system seamlessly.
+
+## Prometheus
+
+Collects metrics from the API gateway and is accessible locally at http://localhost:9090.
 
 ## Test Results
 

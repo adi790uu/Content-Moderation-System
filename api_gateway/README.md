@@ -110,6 +110,10 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
   - Response:
     - `200 OK`: Returns metrics in plain text format.
 
+### Rate Limiting
+
+Have implemented rate limiting, with limit set to 10 requests per minute.
+
 ## Security Considerations
 
 - **Authentication**: Use the `GATEWAY_KEY` to secure access to the moderation service. Ensure that this key is kept secret and not exposed in public repositories.

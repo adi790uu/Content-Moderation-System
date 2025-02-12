@@ -20,7 +20,7 @@ def get_moderation_service():
 async def proxy_moderation(
     request: ModerateTextPayload,
     moderation_service: ModerationService = Depends(get_moderation_service),
-    # _: None = Depends(rate_limit(calls=10, period=60)),
+    _: None = Depends(rate_limit(calls=10, period=60)),
 ):
     try:
         REQUEST_COUNT.inc()
@@ -59,6 +59,7 @@ async def proxy_moderation(
 async def proxy_moderation_result(
     id: UUID4,
     moderation_service: ModerationService = Depends(get_moderation_service),
+    _: None = Depends(rate_limit(calls=10, period=60)),
 ):
     try:
         REQUEST_COUNT.inc()
