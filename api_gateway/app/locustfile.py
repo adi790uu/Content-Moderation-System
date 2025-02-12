@@ -1,4 +1,3 @@
-# locustfile.py
 from locust import HttpUser, task, between
 
 
@@ -8,8 +7,11 @@ class APILoadTest(HttpUser):
     @task
     def moderate_text(self):
         self.client.post(
-            "/moderate", json={"text": "Sample text for moderation."}
+            "/api/moderate", json={"text": "Sample text for moderation."}
         )  # noqa
 
+    @task
     def get_moderation_result(self):
-        self.client.post("/result/2d19daba-653a-4137-8429-613268116b67")
+        self.client.get(
+            "/api/moderation/result/8270137805bd42b18dd35349c826ca2a"
+        )  # noqa

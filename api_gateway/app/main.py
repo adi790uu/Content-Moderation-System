@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
+import prometheus_client
 from app.core.logging_config import setup_logging, log_request_time
 from app.routes import health, moderation
 from app.core.rate_limiter import setup_rate_limiter
@@ -32,5 +33,17 @@ app.add_middleware(
 )
 
 
-app.include_router(health.router, tags=["health"])
-app.include_router(moderation.router, tags=["moderation"])
+@app.get("/metrics")
+async def get_metrics():
+    try:
+        return Response(
+            content=prometheus_client.generate_latest(),
+            media_type="text/plain",
+        )
+    except Exception as e:
+        logger.error(f"Error generating metrics: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error generating metrics")
+
+
+app.include_router(health.router, prefix="/api", tags=["health"])
+app.include_router(moderation.router, prefix="/api", tags=["moderation"])

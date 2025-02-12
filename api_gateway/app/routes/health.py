@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse
 from app.schemas.response import HealthResponse
 from app.core.rate_limiter import rate_limit
 from app.schemas.response import ApiResponse
@@ -10,7 +10,6 @@ from app.core.metrics import (
 )
 from app.core.exceptions import ServiceException
 from app.services.moderation import ModerationService
-import prometheus_client
 from loguru import logger
 
 router = APIRouter()
@@ -63,15 +62,3 @@ async def health_check_moderation_service(
         )
         MODERATION_SERVICE_HEALTH_STATUS.set(0.0)
         raise HTTPException(status_code=500, detail="Internal server error")
-
-
-@router.get("/metrics")
-async def get_metrics():
-    try:
-        return Response(
-            content=prometheus_client.generate_latest(),
-            media_type="text/plain",
-        )
-    except Exception as e:
-        logger.error(f"Error generating metrics: {str(e)}")
-        raise HTTPException(status_code=500, detail="Error generating metrics")

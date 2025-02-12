@@ -24,7 +24,7 @@ To install the moderation service, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/moderation_service.git
+   git clone https://github.com/yourusername/Content-Moderation-System.git
    ```
 2. Navigate to the project directory:
    ```bash
@@ -108,7 +108,7 @@ The Moderation Service is a microservice designed to process text content asynch
 
 ### Flow Diagram
 
-![Flow Diagram](./screenshots/moderate_text_flow_diagram.png)
+![Flow Diagram](../screenshots/moderate_text_flow_diagram.png){: width="300" height="600"}
 
 ## Model Design
 

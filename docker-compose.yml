@@ -1,4 +1,15 @@
 services:
+  postgres:
+    image: postgres:latest
+    restart: "always"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+      POSTGRES_DB: content-moderation
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
   redis:
     image: redis:latest
     ports:

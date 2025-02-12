@@ -20,8 +20,8 @@ This API Gateway serves as the entry point for the moderation service, handling 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/moderation_service.git
-   cd moderation_service/api_gateway
+   git clone https://github.com/yourusername/Content-Moderation-System.git
+   cd Content-Moderation-System/api_gateway
    ```
 
 2. Create a virtual environment:
@@ -96,7 +96,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     - `400 Bad Request`: Text cannot be empty.
     - `500 Internal Server Error`: An error occurred during moderation.
 
-- **GET** `/result/{id}`
+- **GET** `/moderation/result/{id}`
   - Description: Retrieves the result of a moderation task by ID.
   - Response:
     - `200 OK`: Returns the moderation result.

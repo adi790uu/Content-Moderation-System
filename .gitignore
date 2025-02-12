@@ -1,5 +1,8 @@
 venv/
 __pycache__
 logs/
-.env.*
+.env.development
+.env
+.env.production
+.env.test
 .pytest_cache
